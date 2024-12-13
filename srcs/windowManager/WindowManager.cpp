@@ -3,6 +3,8 @@
 #include <X11/Xutil.h>
 #include <iostream>
 #include <X11/Xlib.h>
+#include <csignal>
+#include <mutex>
 
 WindowManager::WindowManager(int width, int height) :
 	WindowX(0), WindowY(0),
@@ -13,10 +15,11 @@ WindowManager::WindowManager(int width, int height) :
 	WindowVisual(CopyFromParent),
 	AttributeValueMask(CWBackPixel | CWEventMask)
 {
+	img = new u_int32_t[width * height];
 	MainDisplay = XOpenDisplay(0);
 	RootWindow = XDefaultRootWindow(MainDisplay);
 	bzero(&WindowAttributes, sizeof(XSetWindowAttributes));
-	WindowAttributes.background_pixel = 0xffafe9af;
+	WindowAttributes.background_pixel = 0x0;
 	WindowAttributes.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask | ExposureMask;
 
 	MainWindow = XCreateWindow(MainDisplay, RootWindow,
@@ -34,6 +37,7 @@ WindowManager::~WindowManager() {
 	XUnmapWindow(this->MainDisplay, this->MainWindow);
 	XDestroyWindow(this->MainDisplay, this->MainWindow);
 	XCloseDisplay(this->MainDisplay);
+	delete[] img;
 }
 
 void WindowManager::loop() {
@@ -55,6 +59,30 @@ void WindowManager::loop() {
 					this->isWindowOpen = false;
 				}
 			} break;
+			case Expose:
+			{
+				std::cout << "test" << std::endl;
+				display_image();
+			} break;
 		}
 	}
+}
+
+void WindowManager::display_image() {
+	XImage image;
+
+	image.width = WindowWidth;
+	image.height = WindowHeight;
+	image.format = ZPixmap;
+	image.data = reinterpret_cast<char *>(img);
+	image.byte_order = LSBFirst;
+	image.bitmap_unit = 32;
+	image.byte_order = LSBFirst;
+	image.bitmap_pad = 32;
+	image.depth = 24;
+	image.bytes_per_line = this->WindowWidth * 4;
+	image.bits_per_pixel = 32;
+
+	XPutImage(MainDisplay, MainWindow, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
+	XFlush(MainDisplay);
 }

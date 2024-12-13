@@ -9,7 +9,7 @@ NAME = window
 
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -g3
-CPPFLAGS = -std=c++98 -MMD -MP
+CPPFLAGS = -MMD -MP
 BUILDDIR = build/
 INCLUDEDIR = includes/
 DEPENDENCIESDIR = $(BUILDDIR)dependencies/

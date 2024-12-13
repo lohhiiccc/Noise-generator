@@ -3,6 +3,7 @@
 #define NOISE_GENERATOR_WINDOWMANAGER_HPP
 
 #include <X11/Xlib.h>
+#include <mutex>
 #include "err.h"
 
 class WindowManager {
@@ -10,8 +11,12 @@ public:
 	WindowManager(int width, int height);
 	~WindowManager();
 
+	u_int32_t *get_image_addr() { return img; }
+
+	void display_image();
 	void loop();
 private:
+	u_int32_t				*img;
 	int						WindowX;
 	int						WindowY;
 	int						WindowWidth;
