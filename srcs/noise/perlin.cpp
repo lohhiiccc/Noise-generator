@@ -11,10 +11,10 @@ PerlinNoise::PerlinNoise() {
 }
 
 void PerlinNoise::initializeGradients() {
-    std::mt19937 gen(0);
+    std::mt19937 gen(512);
     std::uniform_real_distribution<float> dis(0.0, 2 * M_PI);
 
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 512; ++i) {
         float angle = dis(gen);
         grad[i] = Vector2(cos(angle), sin(angle));
     }

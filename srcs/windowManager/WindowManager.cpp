@@ -5,8 +5,9 @@
 #include <X11/Xlib.h>
 #include <csignal>
 
-WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img)) :
+WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img, bool &needUpdate)) :
 	render(render),
+	ptrTabIndex(0),
 	WindowX(0), WindowY(0),
 	WindowWidth(width), WindowHeight(height),
 	BorderWidth(0),
@@ -14,7 +15,8 @@ WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img
 	WindowClass(CopyFromParent),
 	WindowVisual(CopyFromParent),
 	AttributeValueMask(CWBackPixel | CWEventMask),
-	isDisplayReady(false)
+	isDisplayReady(false),
+	needUpdate(true)
 {
 	img = new u_int32_t[width * height];
 	MainDisplay = XOpenDisplay(0);
@@ -30,7 +32,7 @@ WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img
 	XMapWindow(MainDisplay, MainWindow);
 	wmDelete = XInternAtom(MainDisplay, "WM_DELETE_WINDOW", false);
 	XSetWMProtocols(MainDisplay, MainWindow, &wmDelete, 1);
-
+	load_render(render);
 	isWindowOpen = true;
 }
 
@@ -44,11 +46,17 @@ WindowManager::~WindowManager() {
 void WindowManager::handle_events(XEvent &GeneralEvent) {
 	switch(GeneralEvent.type) {
 		case KeyPress:
+		{
+
+		} break;
 		case KeyRelease:
 		{
 			XKeyPressedEvent *event = (XKeyPressedEvent *)&GeneralEvent;
 			if (event->keycode == XKeysymToKeycode(this->MainDisplay, XK_Escape)) {
 				this->isWindowOpen = false;
+			} else if (event->keycode == XKeysymToKeycode(this->MainDisplay, XK_space)) {
+				this->ptrTabIndex = (this->ptrTabIndex + 1) % this->renderFunctions.size();
+				this->render = this->renderFunctions[this->ptrTabIndex];
 			}
 		} break;
 		case ClientMessage: {
@@ -76,6 +84,7 @@ void WindowManager::loop() {
 		if (isDisplayReady) {
 			update_image(this->render);
 			display_image();
+			XSync(this->MainDisplay, false);
 		}
 	}
 }
@@ -99,8 +108,11 @@ void WindowManager::display_image() {
 	XFlush(MainDisplay);
 }
 
-void WindowManager::update_image(int (*func)(u_int32_t *img)) {
-	if (func(this->img))
+void WindowManager::update_image(int (*func)(u_int32_t *img, bool &needUpdate)) {
+	if (func(this->img, this->needUpdate))
 		this->isWindowOpen = false;
+}
 
+void WindowManager::load_render(int (*func)(u_int32_t *img, bool &needUpdate)) {
+	this->renderFunctions.push_back(func);
 }
