@@ -1,21 +1,27 @@
 
-#include <csignal>
 #include "windowManager/WindowManager.hpp"
+#include "noise/perlin.hpp"
 
-#define WIDTH 500
-#define HEIGHT 800
+#define WIDTH 720
+#define HEIGHT 420
 
-int main() {
-	WindowManager	window(WIDTH, HEIGHT);
-	u_int32_t *img = window.get_image_addr();
-
+int render(uint32_t *img) {
+	static PerlinNoise PerlinNoise;
+	static float time = 0.0;
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x < WIDTH; x++) {
-			img[y * WIDTH + x] = (y * 255 / HEIGHT) * 0x100 + (x * 255 / WIDTH);
+			float n = (PerlinNoise.noise(x / 100.0 + time, (y / 100.0) + time));
+
+			int color = static_cast<int>((n + 1) * 127.5);
+			img[y * WIDTH + x] = (color << 16) | (color << 8) | color ;
 		}
 	}
+	time += 0.1;
+	return 0;
+}
 
-
+int main() {
+	WindowManager	window(WIDTH, HEIGHT, render);
 
 	window.loop();
 	return 0;

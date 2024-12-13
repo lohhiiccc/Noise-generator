@@ -1,24 +1,25 @@
 #include "windowManager/WindowManager.hpp"
-#include <string.h>
+#include "noise/perlin.hpp"
 #include <X11/Xutil.h>
 #include <iostream>
 #include <X11/Xlib.h>
 #include <csignal>
-#include <mutex>
 
-WindowManager::WindowManager(int width, int height) :
+WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img)) :
+	render(render),
 	WindowX(0), WindowY(0),
 	WindowWidth(width), WindowHeight(height),
 	BorderWidth(0),
 	WindowDepth(CopyFromParent),
 	WindowClass(CopyFromParent),
 	WindowVisual(CopyFromParent),
-	AttributeValueMask(CWBackPixel | CWEventMask)
+	AttributeValueMask(CWBackPixel | CWEventMask),
+	isDisplayReady(false)
 {
 	img = new u_int32_t[width * height];
 	MainDisplay = XOpenDisplay(0);
 	RootWindow = XDefaultRootWindow(MainDisplay);
-	bzero(&WindowAttributes, sizeof(XSetWindowAttributes));
+	WindowAttributes = {};
 	WindowAttributes.background_pixel = 0x0;
 	WindowAttributes.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask | ExposureMask;
 
@@ -40,30 +41,41 @@ WindowManager::~WindowManager() {
 	delete[] img;
 }
 
+void WindowManager::handle_events(XEvent &GeneralEvent) {
+	switch(GeneralEvent.type) {
+		case KeyPress:
+		case KeyRelease:
+		{
+			XKeyPressedEvent *event = (XKeyPressedEvent *)&GeneralEvent;
+			if (event->keycode == XKeysymToKeycode(this->MainDisplay, XK_Escape)) {
+				this->isWindowOpen = false;
+			}
+		} break;
+		case ClientMessage: {
+			if (static_cast<Atom>(GeneralEvent.xclient.data.l[0]) == this->wmDelete) {
+				this->isWindowOpen = false;
+			}
+		} break;
+		case Expose:
+		{
+			if (!isDisplayReady)
+				isDisplayReady = true;
+			display_image();
+		} break;
+	}
+}
+
 void WindowManager::loop() {
 	while (isWindowOpen) {
-		XEvent GeneralEvent = {};
-		XNextEvent(this->MainDisplay, &GeneralEvent);
-
-		switch(GeneralEvent.type) {
-			case KeyPress:
-			case KeyRelease:
-			{
-				XKeyPressedEvent *event = (XKeyPressedEvent *)&GeneralEvent;
-				if (event->keycode == XKeysymToKeycode(this->MainDisplay, XK_Escape)) {
-					this->isWindowOpen = false;
-				}
-			} break;
-			case ClientMessage: {
-				if (static_cast<Atom>(GeneralEvent.xclient.data.l[0]) == this->wmDelete) {
-					this->isWindowOpen = false;
-				}
-			} break;
-			case Expose:
-			{
-				std::cout << "test" << std::endl;
-				display_image();
-			} break;
+		while (XPending(this->MainDisplay) > 0)
+		{
+			XEvent GeneralEvent = {};
+			XNextEvent(this->MainDisplay, &GeneralEvent);
+			handle_events(GeneralEvent);
+		}
+		if (isDisplayReady) {
+			update_image(this->render);
+			display_image();
 		}
 	}
 }
@@ -85,4 +97,10 @@ void WindowManager::display_image() {
 
 	XPutImage(MainDisplay, MainWindow, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
 	XFlush(MainDisplay);
+}
+
+void WindowManager::update_image(int (*func)(u_int32_t *img)) {
+	if (func(this->img))
+		this->isWindowOpen = false;
+
 }
