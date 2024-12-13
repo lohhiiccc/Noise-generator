@@ -6,7 +6,6 @@
 
 int main() {
 	WindowManager	window(WIDTH, HEIGHT);
-
 	window.loop();
 
 	return 0;
