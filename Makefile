@@ -10,6 +10,7 @@ SRCS= \
 	$(SRC_DIR)effects/random.cpp \
 	$(SRC_DIR)effects/wood.cpp \
 	$(SRC_DIR)effects/mountain.cpp \
+	$(SRC_DIR)effects/debug.cpp \
 
 MAKEFLAGS += --no-print-directory
 

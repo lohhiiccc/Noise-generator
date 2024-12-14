@@ -3,10 +3,7 @@
 #include "window.hpp"
 #include "noise/perlin.hpp"
 
-int marble(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int marble(uint32_t *img) {
 	static PerlinNoise perlinNoise;
 	static float time = 0.0;
 	for (int y = 0; y < HEIGHT; y++) {
@@ -18,7 +15,6 @@ int marble(uint32_t *img, bool &needUpdate) {
 		}
 	}
 	time += 0.01;
-	needUpdate = true;
 	return 0;
 }
 

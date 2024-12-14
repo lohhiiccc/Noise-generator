@@ -5,7 +5,7 @@
 #include <X11/Xlib.h>
 #include <csignal>
 
-WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img, bool &needUpdate)) :
+WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img)) :
 	render(render),
 	ptrTabIndex(0),
 	WindowX(0), WindowY(0),
@@ -15,8 +15,7 @@ WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img
 	WindowClass(CopyFromParent),
 	WindowVisual(CopyFromParent),
 	AttributeValueMask(CWBackPixel | CWEventMask),
-	isDisplayReady(false),
-	needUpdate(true)
+	isDisplayReady(false)
 {
 	img = new u_int32_t[width * height];
 	MainDisplay = XOpenDisplay(0);
@@ -81,10 +80,8 @@ void WindowManager::loop() {
 			handle_events(GeneralEvent);
 		}
 		if (isDisplayReady) {
-			if (this->needUpdate) {
-				update_image(this->render);
-				display_image();
-			}
+			update_image(this->render);
+			display_image();
 			// XSync(this->MainDisplay, false);
 		}
 	}
@@ -112,11 +109,11 @@ void WindowManager::display_image() {
 	XFlush(MainDisplay);
 }
 
-void WindowManager::update_image(int (*func)(u_int32_t *img, bool &needUpdate)) {
-	if (func(this->img, this->needUpdate))
+void WindowManager::update_image(int (*func)(u_int32_t *img)) {
+	if (func(this->img))
 		this->isWindowOpen = false;
 }
 
-void WindowManager::load_render(int (*func)(u_int32_t *img, bool &needUpdate)) {
+void WindowManager::load_render(int (*func)(u_int32_t *img)) {
 	this->renderFunctions.push_back(func);
 }

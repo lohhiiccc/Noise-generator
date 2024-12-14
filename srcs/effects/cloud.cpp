@@ -3,10 +3,7 @@
 #include "window.hpp"
 #include "noise/perlin.hpp"
 
-int cloud(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int cloud(uint32_t *img) {
 	static PerlinNoise PerlinNoise;
 	static float time = 0.0;
 	for (int y = 0; y < HEIGHT; y++) {
@@ -19,7 +16,6 @@ int cloud(uint32_t *img, bool &needUpdate) {
 		}
 	}
 	time += 0.1;
-	needUpdate = true;
 	return 0;
 }
 

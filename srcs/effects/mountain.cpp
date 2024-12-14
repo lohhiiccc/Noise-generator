@@ -3,10 +3,7 @@
 #include "window.hpp"
 #include "noise/perlin.hpp"
 
-int mountain(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int mountain(uint32_t *img) {
 	static PerlinNoise P(9);
 	static PerlinNoise P2(1000);
 	static PerlinNoise P3(500);
@@ -34,9 +31,6 @@ int mountain(uint32_t *img, bool &needUpdate) {
 			img[i * WIDTH + x] = 0x151515;
 		}
 	}
-
-
 	time += 0.03;
-	needUpdate = true;
 	return 0;
 }

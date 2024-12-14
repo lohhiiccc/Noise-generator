@@ -3,10 +3,7 @@
 #include "window.hpp"
 #include "noise/perlin.hpp"
 
-int graph(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int graph(uint32_t *img) {
 	static PerlinNoise PerlinNoise;
 	static float time = 0.0;
 	for (int x = 0; x < WIDTH; x++) {
@@ -21,14 +18,10 @@ int graph(uint32_t *img, bool &needUpdate) {
 		}
 	}
 	time += 0.001;
-	needUpdate = true;
 	return 0;
 }
 
-int graph2(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int graph2(uint32_t *img) {
 	static PerlinNoise PerlinNoise;
 	static float time = 0.0;
 	for (int x = 0; x < WIDTH; x++) {
@@ -45,6 +38,5 @@ int graph2(uint32_t *img, bool &needUpdate) {
 		}
 	}
 	time += 0.001;
-	needUpdate = true;
 	return 0;
 }

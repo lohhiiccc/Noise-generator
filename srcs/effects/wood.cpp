@@ -3,10 +3,7 @@
 #include "window.hpp"
 #include "noise/perlin.hpp"
 
-int wood(uint32_t *img, bool &needUpdate) {
-	if (!needUpdate)
-		return 0;
-	needUpdate = false;
+int wood(uint32_t *img) {
 	static PerlinNoise perlinNoise;
 	static float time = 0.0;
 	for (int y = 0; y < HEIGHT; y++) {
@@ -18,6 +15,5 @@ int wood(uint32_t *img, bool &needUpdate) {
 		}
 	}
 	time += 0.01;
-	needUpdate = true;
 	return 0;
 }
