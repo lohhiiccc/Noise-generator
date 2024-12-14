@@ -1,4 +1,4 @@
-#ifndef VECTPR2_HPP
+#ifndef VECTOR2_HPP
 #define VECTOR2_HPP
 
 class Vector2 {
