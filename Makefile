@@ -1,11 +1,18 @@
 SRC_DIR = srcs/
 SRCS= \
 	$(SRC_DIR)main.cpp \
-	$(SRC_DIR)windowManager/WindowManager.cpp
+	$(SRC_DIR)windowManager/WindowManager.cpp \
+	$(SRC_DIR)noise/perlin.cpp \
+	$(SRC_DIR)math/Vector2.cpp \
+	$(SRC_DIR)effects/cloud.cpp \
+	$(SRC_DIR)effects/graph.cpp \
+	$(SRC_DIR)effects/marble.cpp \
+	$(SRC_DIR)effects/random.cpp \
+	$(SRC_DIR)effects/wood.cpp \
 
 MAKEFLAGS += --no-print-directory
 
-NAME = window
+NAME = perlin
 
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -g3
