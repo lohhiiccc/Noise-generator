@@ -31,11 +31,13 @@ WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img
 	XMapWindow(MainDisplay, MainWindow);
 	wmDelete = XInternAtom(MainDisplay, "WM_DELETE_WINDOW", false);
 	XSetWMProtocols(MainDisplay, MainWindow, &wmDelete, 1);
+	Pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, 24);
 	load_render(render);
 	isWindowOpen = true;
 }
 
 WindowManager::~WindowManager() {
+	XFreePixmap(MainDisplay, Pixmap);
 	XUnmapWindow(this->MainDisplay, this->MainWindow);
 	XDestroyWindow(this->MainDisplay, this->MainWindow);
 	XCloseDisplay(this->MainDisplay);
@@ -82,7 +84,6 @@ void WindowManager::loop() {
 		if (isDisplayReady) {
 			update_image(this->render);
 			display_image();
-			// XSync(this->MainDisplay, false);
 		}
 	}
 }
@@ -102,10 +103,8 @@ void WindowManager::display_image() {
 	image.bytes_per_line = this->WindowWidth * 4;
 	image.bits_per_pixel = 32;
 
-	const Pixmap pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, image.depth);
-	XPutImage(MainDisplay, pixmap, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
-	XCopyArea(MainDisplay, pixmap, MainWindow, DefaultGC(MainDisplay, 0), 0, 0, WindowWidth, WindowHeight, 0, 0);
-	XFreePixmap(MainDisplay, pixmap);
+	XPutImage(MainDisplay, Pixmap, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
+	XCopyArea(MainDisplay, Pixmap, MainWindow, DefaultGC(MainDisplay, 0), 0, 0, WindowWidth, WindowHeight, 0, 0);
 	XFlush(MainDisplay);
 }
 
