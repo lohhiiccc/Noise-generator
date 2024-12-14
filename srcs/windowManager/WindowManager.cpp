@@ -68,7 +68,6 @@ void WindowManager::handle_events(XEvent &GeneralEvent) {
 		{
 			if (!isDisplayReady)
 				isDisplayReady = true;
-			display_image();
 		} break;
 	}
 }
@@ -82,9 +81,11 @@ void WindowManager::loop() {
 			handle_events(GeneralEvent);
 		}
 		if (isDisplayReady) {
-			update_image(this->render);
-			display_image();
-			XSync(this->MainDisplay, false);
+			if (this->needUpdate) {
+				update_image(this->render);
+				display_image();
+			}
+			// XSync(this->MainDisplay, false);
 		}
 	}
 }
@@ -104,7 +105,10 @@ void WindowManager::display_image() {
 	image.bytes_per_line = this->WindowWidth * 4;
 	image.bits_per_pixel = 32;
 
-	XPutImage(MainDisplay, MainWindow, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
+	const Pixmap pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, image.depth);
+	XPutImage(MainDisplay, pixmap, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
+	XCopyArea(MainDisplay, pixmap, MainWindow, DefaultGC(MainDisplay, 0), 0, 0, WindowWidth, WindowHeight, 0, 0);
+	XFreePixmap(MainDisplay, pixmap);
 	XFlush(MainDisplay);
 }
 
