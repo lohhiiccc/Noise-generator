@@ -1,9 +1,7 @@
 #include "windowManager/WindowManager.hpp"
-#include "noise/perlin.hpp"
 #include <X11/Xutil.h>
 #include <iostream>
 #include <X11/Xlib.h>
-#include <csignal>
 
 WindowManager::WindowManager(int width, int height, renderFunction render) :
 	render(render),
@@ -70,13 +68,16 @@ void WindowManager::handle_events(XEvent &GeneralEvent) {
 		} break;
 		case ConfigureNotify:
 		{
-			XConfigureEvent *event = (XConfigureEvent *)&GeneralEvent;
-			if (event->width != this->WindowWidth || event->height != this->WindowHeight) {
-				this->WindowWidth = event->width;
-				this->WindowHeight = event->height;
-				this->resize_img();
-			}
+			this->resize_window((XConfigureEvent *)&GeneralEvent);
 		} break;
+	}
+}
+
+void WindowManager::resize_window(XConfigureEvent *event) {
+	if (event->width != this->WindowWidth || event->height != this->WindowHeight) {
+		this->WindowWidth = event->width;
+		this->WindowHeight = event->height;
+		this->resize_img();
 	}
 }
 

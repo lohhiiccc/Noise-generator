@@ -17,6 +17,7 @@ public:
 	void load_render(renderFunction r);
 	void loop();
 private:
+	void resize_window(XConfigureEvent *event);
 	void resize_img();
 	void init_img();
 	void destroy_img();
