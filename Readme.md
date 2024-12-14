@@ -1,6 +1,6 @@
 # perlin noise experimentations
 This is a simple project to experiment with perlin noise. The project is written in c++ using X11 for the windowing system.
-There are 5 different way to generate iamges using perlin noise built-in the project:
+There are 5 different way to generate images using perlin noise built-in the project:
 
  - cloud effects using 2 superposed perlin noise
  - graph representation of perlin noise in 2D
@@ -55,20 +55,26 @@ The project is divided in 3 main parts:
 
 ## some visual examples:
 ### cloud effect:
-![cloud effect](https://github.com/lohhiiccc/Noise-generator/asset/cloud-perlin_noise.GIF)
+![](https://github.com/lohhiiccc/Noise-generator/asset/cloud-perlin_noise.GIF)
 
 ### graph representation:
-![graph representation](https://github.com/lohhiiccc/Noise-generator/asset/graph-perlin_noise.GIF)
+![](https://github.com/lohhiiccc/Noise-generator/asset/graph-perlin_noise.GIF)
 
 ### marble effect:
-![marble effect](https://github.com/lohhiiccc/Noise-generator/asset/marble-perlin_noise.GIF)
+![](https://github.com/lohhiiccc/Noise-generator/asset/marble-perlin_noise.GIF)
 
 ### wood effect:
-![wood effect](https://github.com/lohhiiccc/Noise-generator/asset/wood-perlin_noise.GIF)
+![](https://github.com/lohhiiccc/Noise-generator/asset/wood-perlin_noise.GIF)
 
 ### unknown effect:
-![unknown effect](https://github.com/lohhiiccc/Noise-generator/asset/randoThings-perlin_noise.GIF)
+![](https://github.com/lohhiiccc/Noise-generator/asset/randoThings-perlin_noise.GIF)
 
+
+## real usage of perlin noise:
+- perlin noise is a random noise that is coherent, meaning that the noise is smooth and continuous
+- this property makes perlin noise very useful in procedural generation
+- in computer graphics and video games, perlin noise is used to generate textures, terrain, clouds, particles, etc...
+- the advantage of perlin noise is that you can reduce the weight of your assets by generating them on the fly
 
 # author:
  - @lohhiiccc
