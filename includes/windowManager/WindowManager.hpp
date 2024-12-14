@@ -6,24 +6,25 @@
 #include <mutex>
 #include <cstdint>
 #include <vector>
-#include "err.h"
+
+typedef int (*renderFunction)(u_int32_t *img, int width, int height);
 
 class WindowManager {
 public:
-	WindowManager(int width, int height, int (*)(u_int32_t *img));
+	WindowManager(int width, int height, renderFunction r);
 	~WindowManager();
 
 	u_int32_t *get_image_addr() { return img; }
 
-	void load_render(int (*)(u_int32_t *img));
+	void load_render(renderFunction r);
 	void loop();
 private:
-	void update_image(int (*)(u_int32_t *img));
+	void update_image(renderFunction);
 	void display_image();
 	void handle_events(XEvent &GeneralEvent);
 
-	int 									(*render)(u_int32_t *img);
-	std::vector<int (*)(u_int32_t *img)> 	renderFunctions;
+	renderFunction							render;
+	std::vector<renderFunction>				renderFunctions;
 	uint8_t 								ptrTabIndex;
 	u_int32_t								*img;
 	int										WindowX;

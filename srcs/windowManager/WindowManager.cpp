@@ -5,7 +5,7 @@
 #include <X11/Xlib.h>
 #include <csignal>
 
-WindowManager::WindowManager(int width, int height, int (*render)(u_int32_t *img)) :
+WindowManager::WindowManager(int width, int height, renderFunction render) :
 	render(render),
 	ptrTabIndex(0),
 	WindowX(0), WindowY(0),
@@ -108,11 +108,11 @@ void WindowManager::display_image() {
 	XFlush(MainDisplay);
 }
 
-void WindowManager::update_image(int (*func)(u_int32_t *img)) {
-	if (func(this->img))
+void WindowManager::update_image(renderFunction r) {
+	if (r(img, WindowWidth, WindowHeight) != 0)
 		this->isWindowOpen = false;
 }
 
-void WindowManager::load_render(int (*func)(u_int32_t *img)) {
-	this->renderFunctions.push_back(func);
+void WindowManager::load_render(renderFunction r) {
+	this->renderFunctions.push_back(r);
 }
