@@ -14,11 +14,12 @@ public:
 	WindowManager(int width, int height, renderFunction r);
 	~WindowManager();
 
-	u_int32_t *get_image_addr() { return img; }
-
 	void load_render(renderFunction r);
 	void loop();
 private:
+	void resize_img();
+	void init_img();
+	void destroy_img();
 	void update_image(renderFunction);
 	void display_image();
 	void handle_events(XEvent &GeneralEvent);

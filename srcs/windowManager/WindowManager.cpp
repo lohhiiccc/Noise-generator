@@ -17,7 +17,6 @@ WindowManager::WindowManager(int width, int height, renderFunction render) :
 	AttributeValueMask(CWBackPixel | CWEventMask),
 	isDisplayReady(false)
 {
-	img = new u_int32_t[width * height];
 	MainDisplay = XOpenDisplay(0);
 	RootWindow = XDefaultRootWindow(MainDisplay);
 	WindowAttributes = {};
@@ -31,17 +30,16 @@ WindowManager::WindowManager(int width, int height, renderFunction render) :
 	XMapWindow(MainDisplay, MainWindow);
 	wmDelete = XInternAtom(MainDisplay, "WM_DELETE_WINDOW", false);
 	XSetWMProtocols(MainDisplay, MainWindow, &wmDelete, 1);
-	Pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, 24);
+	this->init_img();
 	load_render(render);
 	isWindowOpen = true;
 }
 
 WindowManager::~WindowManager() {
-	XFreePixmap(MainDisplay, Pixmap);
+	this->destroy_img();
 	XUnmapWindow(this->MainDisplay, this->MainWindow);
 	XDestroyWindow(this->MainDisplay, this->MainWindow);
 	XCloseDisplay(this->MainDisplay);
-	delete[] img;
 }
 
 void WindowManager::handle_events(XEvent &GeneralEvent) {
@@ -69,6 +67,15 @@ void WindowManager::handle_events(XEvent &GeneralEvent) {
 		{
 			if (!isDisplayReady)
 				isDisplayReady = true;
+		} break;
+		case ConfigureNotify:
+		{
+			XConfigureEvent *event = (XConfigureEvent *)&GeneralEvent;
+			if (event->width != this->WindowWidth || event->height != this->WindowHeight) {
+				this->WindowWidth = event->width;
+				this->WindowHeight = event->height;
+				this->resize_img();
+			}
 		} break;
 	}
 }
@@ -115,4 +122,19 @@ void WindowManager::update_image(renderFunction r) {
 
 void WindowManager::load_render(renderFunction r) {
 	this->renderFunctions.push_back(r);
+}
+
+void WindowManager::init_img() {
+	this->img = new u_int32_t[WindowWidth * WindowHeight];
+	this->Pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, 24);
+}
+
+void WindowManager::destroy_img() {
+	delete[] img;
+	XFreePixmap(MainDisplay, Pixmap);
+}
+
+void WindowManager::resize_img() {
+	this->destroy_img();
+	this->init_img();
 }
