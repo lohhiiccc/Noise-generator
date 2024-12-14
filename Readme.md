@@ -1,12 +1,13 @@
 # perlin noise experimentations
 This is a simple project to experiment with perlin noise. The project is written in c++ using X11 for the windowing system.
-There are 5 different way to generate images using perlin noise built-in the project:
+There are 7 different way to generate images using perlin noise built-in the project:
 
  - cloud effects using 2 superposed perlin noise
- - graph representation of perlin noise in 2D
+ - 2 graph representation of perlin noise in 2D
  - marble effect
  - wood effect
  - one effect that I don't know how to describe
+ - procedural landscape
 
  ## usage:
 ```bash
@@ -60,11 +61,17 @@ The project is divided in 3 main parts:
 ### graph representation:
 <img src="asset/graph-perlin_noise.GIF" width="75%">
 
+## second graph representation:
+<img src="asset/graph2-perlin_noise.GIF" width="75%">
+
 ### marble effect:
 <img src="asset/marble-perlin_noise.GIF" width="75%">
 
 ### wood effect:
 <img src="asset/wood-perlin_noise.GIF" width="75%">
+
+### procedural landscape:
+<img src="asset/mountain-perlin_noise.GIF" width="75%">
 
 ### unknown effect:
 <img src="asset/randomThings-pelin_noise.GIF" width="75%">
