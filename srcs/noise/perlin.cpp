@@ -18,7 +18,7 @@ void PerlinNoise::initializeGradients() {
     std::mt19937 gen(seed);
     std::uniform_real_distribution<float> dis(0.0, 2 * M_PI);
 
-    for (int i = 0; i < 512; ++i) {
+    for (int i = 0; i < 256; ++i) {
         float angle = dis(gen);
         grad[i] = Vector2(cos(angle), sin(angle));
     }
@@ -26,7 +26,7 @@ void PerlinNoise::initializeGradients() {
 
 Vector2 PerlinNoise::randoGradient(int ix, int iy) {
     uint32_t hash = ix * 7385451 ^ iy * 19349663;
-    return grad[hash & 512];
+    return grad[hash & 0xFF];
 }
 
 float PerlinNoise::dotGridGradient(int ix, int iy, float x, float y) {

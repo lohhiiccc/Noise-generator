@@ -13,7 +13,7 @@ public:
 private:
 	int seed;
 	void initializeGradients();
-	Vector2 grad[512];
+	Vector2 grad[256];
 	Vector2 randoGradient(int ix, int iy);
 	float dotGridGradient(int ix, int iy, float x, float y);
 	float interpolate(float a, float a1, float w);

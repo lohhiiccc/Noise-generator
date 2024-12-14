@@ -4,7 +4,9 @@
 
 
 int main() {
-	WindowManager window(WIDTH, HEIGHT, graph);
+	WindowManager window(WIDTH, HEIGHT, mountain);
+	window.load_render(graph);
+	window.load_render(graph2);
 	window.load_render(cloud);
 	window.load_render(marble);
 	window.load_render(random);
