@@ -55,19 +55,19 @@ The project is divided in 3 main parts:
 
 ## some visual examples:
 ### cloud effect:
-![](https://github.com/lohhiiccc/Noise-generator/asset/cloud-perlin_noise.GIF)
+<img src="asset/cloud-perlin_noise.GIF" width="75%">
 
 ### graph representation:
-![](https://github.com/lohhiiccc/Noise-generator/asset/graph-perlin_noise.GIF)
+<img src="asset/graph-perlin_noise.GIF" width="75%">
 
 ### marble effect:
-![](https://github.com/lohhiiccc/Noise-generator/asset/marble-perlin_noise.GIF)
+<img src="asset/marble-perlin_noise.GIF" width="75%">
 
 ### wood effect:
-![](https://github.com/lohhiiccc/Noise-generator/asset/wood-perlin_noise.GIF)
+<img src="asset/wood-perlin_noise.GIF" width="75%">
 
 ### unknown effect:
-![](https://github.com/lohhiiccc/Noise-generator/asset/randoThings-perlin_noise.GIF)
+<img src="asset/randomThings-pelin_noise.GIF" width="75%">
 
 
 ## real usage of perlin noise:
