@@ -7,9 +7,11 @@
 class PerlinNoise {
 public:
 	PerlinNoise();
+	PerlinNoise(int seed);
 	float  noise(float x, float  y);
 
 private:
+	int seed;
 	void initializeGradients();
 	Vector2 grad[512];
 	Vector2 randoGradient(int ix, int iy);
