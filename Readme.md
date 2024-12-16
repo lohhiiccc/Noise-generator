@@ -56,25 +56,25 @@ The project is divided in 3 main parts:
 
 ## some visual examples:
 ### cloud effect:
-<img src="asset/cloud-perlin_noise.GIF" width="75%">
+<img src="asset/cloud-perlin_noise-min.gif" width="75%">
 
 ### graph representation:
-<img src="asset/graph-perlin_noise.GIF" width="75%">
+<img src="asset/graph-perlin_noise-min.gif" width="75%">
 
 ## second graph representation:
-<img src="asset/graph2-perlin_noise.GIF" width="75%">
+<img src="asset/graph2-perlin_noise-min.gif" width="75%">
 
 ### marble effect:
-<img src="asset/marble-perlin_noise.GIF" width="75%">
+<img src="asset/marble-perlin_noise-min.gif" width="75%">
 
 ### wood effect:
-<img src="asset/wood-perlin_noise.GIF" width="75%">
+<img src="asset/wood-perlin_noise-min.gif" width="75%">
 
 ### procedural landscape:
-<img src="asset/mountain-perlin_noise.GIF" width="75%">
+<img src="asset/mountain-perlin_noise-min.gif" width="75%">
 
 ### unknown effect:
-<img src="asset/randomThings-pelin_noise.GIF" width="75%">
+<img src="asset/randomThings-pelin_noise-min.gif" width="75%">
 
 
 ## real usage of perlin noise:
