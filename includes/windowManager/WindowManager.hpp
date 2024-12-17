@@ -45,7 +45,7 @@ private:
 	Atom 									wmDelete;
 	bool 									isWindowOpen;
 	bool									isDisplayReady;
-	Pixmap									Pixmap;
+	Pixmap									pixmap;
 };
 
 #endif //NOISE_GENERATOR_WINDOWMANAGER_HPP

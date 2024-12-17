@@ -111,8 +111,8 @@ void WindowManager::display_image() {
 	image.bytes_per_line = this->WindowWidth * 4;
 	image.bits_per_pixel = 32;
 
-	XPutImage(MainDisplay, Pixmap, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
-	XCopyArea(MainDisplay, Pixmap, MainWindow, DefaultGC(MainDisplay, 0), 0, 0, WindowWidth, WindowHeight, 0, 0);
+	XPutImage(MainDisplay, pixmap, DefaultGC(MainDisplay, 0), &image, 0, 0, 0, 0, WindowWidth, WindowHeight);
+	XCopyArea(MainDisplay, pixmap, MainWindow, DefaultGC(MainDisplay, 0), 0, 0, WindowWidth, WindowHeight, 0, 0);
 	XFlush(MainDisplay);
 }
 
@@ -127,12 +127,12 @@ void WindowManager::load_render(renderFunction r) {
 
 void WindowManager::init_img() {
 	this->img = new u_int32_t[WindowWidth * WindowHeight];
-	this->Pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, 24);
+	this->pixmap = XCreatePixmap(MainDisplay, MainWindow, WindowWidth, WindowHeight, 24);
 }
 
 void WindowManager::destroy_img() {
 	delete[] img;
-	XFreePixmap(MainDisplay, Pixmap);
+	XFreePixmap(MainDisplay, pixmap);
 }
 
 void WindowManager::resize_img() {
